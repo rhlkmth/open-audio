@@ -197,7 +197,7 @@ export default function Home() {
                   value={inputText}
                   onChange={handleInputChange}
                   resize="vertical"
-                  maxLength={4096}
+                  maxLength={262144}
                   borderColor="black"
                 />
                 <Box textAlign="right" fontSize="sm">
