@@ -122,7 +122,7 @@ export default function Home() {
 
 
   const handleInputChange = (e) => {
-    if (e.target.value.length <= 4096) {
+    if (e.target.value.length <= 262144) {
       setInputText(e.target.value);
     }
   };
