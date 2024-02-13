@@ -201,7 +201,7 @@ export default function Home() {
                   borderColor="black"
                 />
                 <Box textAlign="right" fontSize="sm">
-                  {inputText.length} / 4096
+                  {inputText.length} / 262144
                 </Box>
               </FormControl>
 
