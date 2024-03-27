@@ -223,10 +223,10 @@ sk-x3UKCid6kJYa9FZp3rneT3B27lbkFJaf6aMp4odqXsdbNxxq8W
                     _hover={{ borderColor: 'gray.400' }} // Optional: style for hover state
                   >
                     {/* List of supported voices */}
+                    <option value='onyx'>Onyx</option>
                     <option value='alloy'>Alloy</option>
                     <option value='echo'>Echo</option>
                     <option value='fable'>Fable</option>
-                    <option value='onyx'>Onyx</option>
                     <option value='nova'>Nova</option>
                     <option value='shimmer'>Shimmer</option>
                   </Select>
