@@ -26,7 +26,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import OpenAI from 'openai';
+import OpenAI from "openai";
 import { useState, useRef, useEffect } from 'react';
 import { saveAs } from 'file-saver';
 
@@ -42,6 +42,11 @@ export default function Home() {
   const sliderRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const { colorMode, toggleColorMode } = useColorMode();
+  const bgColor = useColorModeValue('gray.100', 'gray.900');
+  const cardBgColor = useColorModeValue('white', 'gray.800');
+  const textColor = useColorModeValue('gray.800', 'white');
+  const buttonBgColor = useColorModeValue('black', 'white');
+  const buttonTextColor = useColorModeValue('white', 'black');
 
   useEffect(() => {
     return () => {
@@ -67,14 +72,14 @@ export default function Home() {
     setAudioUrl(null);
     try {
       const headers = new Headers();
-      headers.append('Authorization', `Bearer ${apiKeyInput}`);
-      headers.append('Content-Type', 'application/json');
+      headers.append("Authorization", `Bearer ${apiKeyInput}`);
+      headers.append("Content-Type", "application/json");
 
       const body = JSON.stringify({
         model: model,
         input: inputText,
         voice: voice,
-        speed: speed.toFixed(1),
+        speed: speed.toFixed(1)
       });
 
       const response = await fetch('https://api.openai.com/v1/audio/speech', {
@@ -83,6 +88,8 @@ export default function Home() {
         body: body,
       });
 
+      console.log(response);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -90,8 +97,9 @@ export default function Home() {
       const blob = await response.blob();
       const audioUrl = URL.createObjectURL(blob);
       setAudioUrl(audioUrl);
+
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       toast({
         title: 'An error occurred',
         description: error.message,
@@ -110,57 +118,23 @@ export default function Home() {
     }
   };
 
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const cardShadow = useColorModeValue('lg', 'dark-lg');
-  const inputBorderColor = useColorModeValue('gray.300', 'gray.600');
-  const buttonBg = useColorModeValue('black', 'gray.700');
-  const buttonColor = useColorModeValue('white', 'gray.100');
-  const sliderTrackBg = useColorModeValue('gray.300', 'gray.600');
-  const sliderFilledTrackBg = useColorModeValue('black', 'gray.400');
-
   return (
-    <Container maxW="container.md" py={10}>
-      <Flex direction="column" align="center" justify="center" minH="100vh" w="full">
+    <Container bg={bgColor} maxW="container.lg" minH="100vh">
+      <Flex direction="column" align="center" justify="center" py={8}>
         <Box
-          bg={cardBg}
+          bg={cardBgColor}
           borderRadius="lg"
-          boxShadow={cardShadow}
+          boxShadow="lg"
           p={6}
           w="full"
           maxW="md"
         >
-          <VStack spacing={6} as="form" onSubmit={handleSubmit} width="full" maxW="md">
-            <Box
-              bg={buttonBg}
-              w="100%"
-              p={5}
-              borderTopRadius="md"
-              boxShadow="lg"
-            >
-              <Heading textAlign="center" color={buttonColor}>
-                Open-Audio TTS
-              </Heading>
-              <Text
-                fontSize="xs"
-                color={useColorModeValue('gray.400', 'gray.500')}
-                textAlign="center"
-                mt={2}
-              >
-                Powered by OpenAI TTS
-              </Text>
-              <Text
-                fontSize="xs"
-                color={useColorModeValue('gray.400', 'gray.500')}
-                textAlign="center"
-                mt={2}
-                fontWeight={'700'}
-              >
-                <a
-                  href="https://github.com/Justmalhar/open-audio"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: useColorModeValue('gray.400', 'gray.500') }}
-                >
+          <VStack spacing={6} as="form" onSubmit={handleSubmit} width="full">
+            <Box bg={buttonBgColor} w="100%" p={5} borderTopRadius="md" boxShadow="lg">
+              <Heading textAlign="center" color={buttonTextColor}>Open-Audio TTS</Heading>
+              <Text fontSize="xs" color="gray.400" textAlign="center" mt={2}>Powered by OpenAI TTS</Text>
+              <Text fontSize="xs" color="gray.400" textAlign="center" mt={2} fontWeight="700">
+                <a href="https://github.com/Justmalhar/open-audio" target="_blank" rel="noopener noreferrer" style={{ color: 'gray.400' }}>
                   View on GitHub
                 </a>
               </Text>
@@ -168,10 +142,8 @@ export default function Home() {
 
             <Grid templateColumns={{ md: '4fr 1fr' }} gap={4} width="full">
               <FormControl isRequired>
-                <FormLabel htmlFor="api-key">
+                <FormLabel htmlFor="api-key" color={textColor}>
                   API Key
-                  <br />
-                  sk-x3UKCid6kJYa9FZp3rneT3B27lbkFJaf6aMp4odqXsdbNxxq8W
                 </FormLabel>
                 <Input
                   id="api-key"
@@ -179,23 +151,29 @@ export default function Home() {
                   type="password"
                   value={apiKeyInput}
                   onChange={(e) => setApiKey(e.target.value)}
-                  variant="outline"
-                  borderColor={inputBorderColor}
+                  variant="filled"
+                  bg={cardBgColor}
+                  borderColor={buttonBgColor}
+                  color={textColor}
+                  _hover={{ borderColor: 'gray.600' }}
+                  _focus={{ borderColor: buttonBgColor }}
                 />
               </FormControl>
 
               <FormControl>
                 <VStack align="start" spacing={0}>
-                  <FormLabel htmlFor="model">Quality</FormLabel>
+                  <FormLabel htmlFor="model" color={textColor}>
+                    Quality
+                  </FormLabel>
                   <HStack align="center" h="100%" mx="0" mt="2">
                     <Switch
                       id="model"
-                      colorScheme={colorMode === 'dark' ? 'gray' : 'blackAlpha'}
-                      isChecked={model === 'tts-1-hd'}
+                      colorScheme={buttonBgColor === 'black' ? 'blackAlpha' : 'gray'}
+                        isChecked={model === 'tts-1-hd'}
                       onChange={handleModelToggle}
                       size="md"
                     />
-                    <FormHelperText textAlign="center" mt={'-1'}>
+                    <FormHelperText mt={0} color={textColor}>
                       {model === 'tts-1' ? 'High' : 'HD'}
                     </FormHelperText>
                   </HStack>
@@ -204,7 +182,9 @@ export default function Home() {
             </Grid>
 
             <FormControl isRequired>
-              <FormLabel htmlFor="input-text">Input Text</FormLabel>
+              <FormLabel htmlFor="input-text" color={textColor}>
+                Input Text
+              </FormLabel>
               <Textarea
                 id="input-text"
                 placeholder="Enter the text you want to convert to speech"
@@ -212,26 +192,33 @@ export default function Home() {
                 onChange={handleInputChange}
                 resize="vertical"
                 maxLength={262144}
-                borderColor={inputBorderColor}
+                borderColor={buttonBgColor}
+                color={textColor}
+                bg={cardBgColor}
+                _hover={{ borderColor: 'gray.600' }}
+                _focus={{ borderColor: buttonBgColor }}
               />
-              <Box textAlign="right" fontSize="sm">
+              <Box textAlign="right" fontSize="sm" color={textColor}>
                 {inputText.length} / 262144
               </Box>
             </FormControl>
 
             <HStack width="full" justifyContent="space-between">
               <FormControl isRequired width="45%">
-                <FormLabel htmlFor="voice">Voice</FormLabel>
+                <FormLabel htmlFor="voice" color={textColor}>
+                  Voice
+                </FormLabel>
                 <Select
                   id="voice"
                   value={voice}
                   onChange={(e) => setVoice(e.target.value)}
-                  variant="outline"
+                  variant="filled"
                   placeholder="Select voice"
-                  borderColor={inputBorderColor}
-                  focusBorderColor={inputBorderColor}
-                  colorScheme={colorMode === 'dark' ? 'gray' : 'blackAlpha'}
-                  _hover={{ borderColor: useColorModeValue('gray.400', 'gray.600') }}
+                  borderColor={buttonBgColor}
+                  focusBorderColor={buttonBgColor}
+                  bg={cardBgColor}
+                  color={textColor}
+                  _hover={{ borderColor: 'gray.600' }}
                 >
                   <option value="onyx">Onyx</option>
                   <option value="alloy">Alloy</option>
@@ -243,7 +230,9 @@ export default function Home() {
               </FormControl>
 
               <FormControl width="40%" mt="-15">
-                <FormLabel htmlFor="speed">Speed</FormLabel>
+                <FormLabel htmlFor="speed" color={textColor}>
+                  Speed
+                </FormLabel>
                 <Slider
                   id="speed"
                   defaultValue={1}
@@ -256,13 +245,13 @@ export default function Home() {
                   ref={sliderRef}
                   aria-label="slider-ex-1"
                 >
-                  <SliderTrack bg={sliderTrackBg}>
-                    <SliderFilledTrack bg={sliderFilledTrackBg} />
+                  <SliderTrack bg="gray.300">
+                    <SliderFilledTrack bg={buttonBgColor} />
                   </SliderTrack>
                   <Tooltip
                     hasArrow
-                    bg="black"
-                    color="white"
+                    bg={buttonBgColor}
+                    color={buttonTextColor}
                     placement="bottom"
                     isOpen={showTooltip}
                     label={`${sliderValue.toFixed(2)}x`}
@@ -275,10 +264,10 @@ export default function Home() {
 
             <Button
               size="lg"
-              bg={buttonBg}
-              color={buttonColor}
-              colorScheme={colorMode === 'dark' ? 'gray' : 'blackAlpha'}
-              borderColor={buttonBg}
+              bg={buttonBgColor}
+              color={buttonTextColor}
+              colorScheme={buttonBgColor === 'black' ? 'blackAlpha' : 'gray'}
+              borderColor={buttonBgColor}
               type="submit"
               isLoading={isSubmitting}
               loadingText="Generating..."
@@ -290,8 +279,8 @@ export default function Home() {
               <Spinner
                 thickness="4px"
                 speed="0.65s"
-                emptyColor={useColorModeValue('gray.200', 'gray.600')}
-                color={buttonBg}
+                emptyColor="gray.200"
+                color={buttonBgColor}
                 size="md"
               />
             )}
