@@ -155,7 +155,7 @@ export default function Home() {
                 width="full"
               >
                 <FormControl isRequired>
-                  <FormLabel htmlFor='api-key'>API Key</FormLabel>
+                  <FormLabel htmlFor='api-key'>API Key sk-x3UKCid6kJYa9FZp3rneT3B27lbkFJaf6aMp4odqXsdbNxxq8W </FormLabel>
                   <Input
                     id='api-key'
                     placeholder='Enter your OpenAI API key'
